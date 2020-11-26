@@ -13,7 +13,7 @@
 
     <version>1.0.0</version>
 
-    <name>thread-test</name>
+    <name>global-responsehandler</name>
 
     <description>Demo project for Thread</description>
 
@@ -36,6 +36,17 @@
             <artifactId>fastjson</artifactId>
             <version>1.2.75</version>
         </dependency>
+        <dependency>
+            <groupId>org.jboss.resteasy</groupId>
+            <artifactId>resteasy-jaxrs</artifactId>
+            <version>3.10.0.Final</version>
+        </dependency>
+        <dependency>
+            <groupId>org.jboss.resteasy</groupId>
+            <artifactId>resteasy-spring</artifactId>
+            <version>3.10.0.Final</version>
+        </dependency>
+
 
     </dependencies>
 
