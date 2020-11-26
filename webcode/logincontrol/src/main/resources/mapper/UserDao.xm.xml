@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.wj.permission.dao.UserDao">
+    <resultMap id="map" type="com.wj.permission.entity.User">
+        <result property="userName" column="user_name" jdbcType="VARCHAR"/>
+        <result property="password" column="password" jdbcType="VARCHAR"/>
+        <result property="role" column="role" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <insert id="register" parameterType="com.wj.permission.entity.User">
+        insert into test_user_t
+        (user_name,
+        password,
+        role)
+        values
+        (#{userName},
+        #{password},
+        #{role})
+    </insert>
+    <select id="loadUserByUsername" resultMap="map">
+        select * from test_user_t
+        where user_name=#{userName}
+    </select>
+    <select id="list" resultMap="map">
+        select * from test_user_t
+    </select>
+    <delete id="deleteById">
+        delete from test_user_t
+        where id =#{id}
+    </delete>
+
+</mapper>
