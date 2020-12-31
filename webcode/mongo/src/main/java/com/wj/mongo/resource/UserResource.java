@@ -1,15 +1,19 @@
 package com.wj.mongo.resource;
 
+import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
-import com.wj.mongo.util.BeanUtil;
+import com.mongodb.client.*;
 import com.wj.mongo.entitty.JsonResult;
 import com.wj.mongo.entitty.User;
+import com.wj.mongo.util.BeanUtil;
+import org.bson.Document;
+import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.convert.MongoConverter;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
-import org.springframework.data.mongodb.core.query.UpdateDefinition;
 import org.springframework.web.bind.annotation.*;
 
 import java.lang.reflect.Field;
@@ -26,6 +30,8 @@ import java.util.List;
 public class UserResource {
 
   @Autowired private MongoTemplate template;
+
+  @Autowired private MongoConverter converter;
 
   @GetMapping("/getList")
   public JsonResult getList() {
@@ -48,8 +54,24 @@ public class UserResource {
 
   @GetMapping("/getByCondition")
   public JsonResult getByCondition() {
+    MongoClient client = MongoClients.create("mongodb://localhost:27017");
+    MongoDatabase db = client.getDatabase("test");
+    MongoCollection<Document> user = db.getCollection("user");
+    BasicDBObject basic = new BasicDBObject();
+    basic.put("_id", new ObjectId("5fd81f627642641d15d5ad7d"));
+    FindIterable<Document> documents = user.find(basic);
+    Document doc=new Document();
+    doc.append("name","yhm").append("nation","回族").append("age",66).append("address","中国江苏南京");
+    user.insertOne(doc);
+    MongoCursor<Document> cursor = documents.cursor();
+    while (cursor.hasNext()) {
+      Document document = cursor.next();
+      User read = converter.read(User.class, document);
+      System.out.println(read.toString());
+    }
     List<User> users =
-        template.find(Query.query(Criteria.where("name").is("fiberhome3")), User.class, "user");
+        template.find(
+            Query.query(Criteria.where("id").is("5fd81f627642641d15d5ad7d")), User.class, "user");
     return JsonResult.success(users);
   }
 
@@ -57,9 +79,14 @@ public class UserResource {
   public JsonResult update(@RequestBody User user) {
     try {
       Update update = new Update();
+      Query query=new Query();
+      query.addCriteria(Criteria.where("_id").is("5fd820e8ea5c955e019e889d"));
       setUpdate(update, user);
       template.upsert(
-          Query.query(Criteria.where("name").is(null)), update, User.class, "user");
+          query,
+          update,
+          User.class,
+          "user");
       return JsonResult.success();
     } catch (IllegalAccessException e) {
       e.printStackTrace();
