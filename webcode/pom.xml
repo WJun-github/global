@@ -12,6 +12,7 @@
     <groupId>com.wj.webcode</groupId>
     <artifactId>webcode</artifactId>
     <version>1.0.0</version>
+    <packaging>pom</packaging>
 
     <name>webcode</name>
 
@@ -45,6 +46,17 @@
             <version>1.0.0</version>
         </dependency>
 
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>fastjson</artifactId>
+            <version>1.2.75</version>
+        </dependency>
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>30.1-jre</version>
+        </dependency>
+
 
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -63,6 +75,9 @@
         <module>nettyclient</module>
         <module>global-responsehandler</module>
         <module>logincontrol</module>
+        <module>redis</module>
+        <module>amqp</module>
+        <module>mongo</module>
 
     </modules>
 
